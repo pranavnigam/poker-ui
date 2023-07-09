@@ -27,7 +27,7 @@ export default function CreateRoom() {
         jql: jql,
       };
       axios
-        .post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//create-room", { ...request })
+        .post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/create-room", { ...request })
         .then((response) => {
           if (response.data && response.data.roomId) {
             sessionStorage.setItem(
@@ -60,7 +60,7 @@ export default function CreateRoom() {
         username: joinerName,
       };
       axios
-        .post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//join-room", { ...request })
+        .post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/join-room", { ...request })
         .then((response) => {
           if(response.status === 201) {
             sessionStorage.setItem("userSession", JSON.stringify(response.data));

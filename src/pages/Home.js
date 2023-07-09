@@ -32,7 +32,7 @@ function Home() {
     const [isAdmin, setIsAdmin] = useState(userSession && userSession.admin ? userSession.admin : false);
 
     useEffect(() => {
-      const socketInstance = io.connect('http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/', {
+      const socketInstance = io.connect('http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080', {
         withCredentials: true, //Setting it true will enable sending cookies to server
       });
 
@@ -87,7 +87,7 @@ function Home() {
     const fetchUserDetails = () => {
       const userSession = JSON.parse(sessionStorage.getItem("userSession"));
       if(userSession) {
-        axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//user-details", { params: { roomId: userSession.roomId } }).then((response) => {
+        axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/user-details", { params: { roomId: userSession.roomId } }).then((response) => {
           if(response && response.data && response.data.status === 201) {
             updateMembersInTable(response.data.users);
           }
@@ -102,7 +102,7 @@ function Home() {
       const request = {...userSession, vote: option};
       setVoteStatus(true);
       setVoteValue(option);
-      axios.post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//cast-vote", { ...request }).then((response) => {
+      axios.post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/cast-vote", { ...request }).then((response) => {
         if(response && response.status === 201) {
           console.log("castVote response: ", response.data);
         }
@@ -158,7 +158,7 @@ function Home() {
     };
 
     const handleRevealCard = () => {
-      axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//reveal-card").then(res => {
+      axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/reveal-card").then(res => {
         if(res.status === 200) {
           console.log("Reveal Card response: ", res.data);
         }
@@ -168,7 +168,7 @@ function Home() {
     };
 
     const handleLeaveRoom = () => {
-      axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//leave-room").then(res => {
+      axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/leave-room").then(res => {
         if(res.status === 201) {
           console.log("Leave Room response: ", res);
           navigate("/")

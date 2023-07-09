@@ -12,7 +12,7 @@ function App() {
   }, []);
 
   const fetchIssue = () => {
-    fetch('http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080//api/login')
+    fetch('http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/api/login')
     .then(response => response.json())
     .then(data => {
       console.log(data);
