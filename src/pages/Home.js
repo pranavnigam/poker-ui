@@ -50,15 +50,8 @@ function Home() {
       });
 
       socketInstance.on("vote-casted", (response) => {
-        const { userId, voted } = response.data;
-        const userList = [ ...userDetails ];
-        userList.map(user => {
-          if(user.userId === userId) {
-            user.voted = voted;
-          }
-          return user;
-        })
-        updateParticipantVoteStatus(userId, userList);
+        const userList = response.data.userDetails;
+        updateMembersInTable(userList);
       });
 
       socketInstance.on("users-update", (response) => {
