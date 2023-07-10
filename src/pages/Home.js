@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { Button, Typography } from "@mui/material";
+import { Alert, Button, Typography } from "@mui/material";
 import "../App.css";
 import ai from "../assets/ai.png";
 import businessman from "../assets/businessman.png";
@@ -29,10 +29,11 @@ function Home() {
     const voteOptions = [1, 2, 3, 5, 8];
 
     const userSession = JSON.parse(sessionStorage.getItem('userSession'));
+    const [roomId, setRoomId] = useState(userSession.roomId);
     const [isAdmin, setIsAdmin] = useState(userSession && userSession.admin ? userSession.admin : false);
 
     useEffect(() => {
-      const socketInstance = io.connect('http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080', {
+      const socketInstance = io.connect('http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080', {
         withCredentials: true, //Setting it true will enable sending cookies to server
       });
 
@@ -80,7 +81,7 @@ function Home() {
     const fetchUserDetails = () => {
       const userSession = JSON.parse(sessionStorage.getItem("userSession"));
       if(userSession) {
-        axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/user-details", { params: { roomId: userSession.roomId } }).then((response) => {
+        axios.get("http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080/user-details", { params: { roomId: userSession.roomId } }).then((response) => {
           if(response && response.data && response.data.status === 201) {
             updateMembersInTable(response.data.users);
           }
@@ -95,7 +96,7 @@ function Home() {
       const request = {...userSession, vote: option};
       setVoteStatus(true);
       setVoteValue(option);
-      axios.post("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/cast-vote", { ...request }).then((response) => {
+      axios.post("http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080/cast-vote", { ...request }).then((response) => {
         if(response && response.status === 201) {
           console.log("castVote response: ", response.data);
         }
@@ -151,7 +152,7 @@ function Home() {
     };
 
     const handleRevealCard = () => {
-      axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/reveal-card").then(res => {
+      axios.get("http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080/reveal-card").then(res => {
         if(res.status === 200) {
           console.log("Reveal Card response: ", res.data);
         }
@@ -161,7 +162,7 @@ function Home() {
     };
 
     const handleLeaveRoom = () => {
-      axios.get("http://ec2-3-135-237-158.us-east-2.compute.amazonaws.com:8080/leave-room").then(res => {
+      axios.get("http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080/leave-room").then(res => {
         if(res.status === 201) {
           console.log("Leave Room response: ", res);
           navigate("/")
@@ -173,6 +174,7 @@ function Home() {
 
     return (
       <div className="board-container">
+        <Alert severity="success">Share the Room Id {roomId} with others to invite.</Alert>
         <div className="leave-room">
           <Button variant="outlined" onClick={handleLeaveRoom} style={{background: '#e73434',color: 'black', margin: '20px'}} startIcon={<ExitToAppOutlinedIcon />}>
             Leave Room
