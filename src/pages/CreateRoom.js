@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import "../App.css";
 import axios from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/Walmart_logo.svg";
 
 export default function CreateRoom() {
   const navigate = useNavigate();
@@ -20,14 +21,14 @@ export default function CreateRoom() {
 
   //Create Room Methods
   const handleCreateRoom = () => {
-    if (roomName !== "" && username !== "" && jql !== "") {
+    if (roomName !== "" && username !== "") {
       const request = {
         roomName: roomName,
         username: username,
-        jql: jql,
+        jql: "jql",
       };
       axios
-        .post("http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080/create-room", { ...request })
+        .post("http://localhost:8080/create-room", { ...request })
         .then((response) => {
           if (response.data && response.data.roomId) {
             sessionStorage.setItem(
@@ -39,6 +40,7 @@ export default function CreateRoom() {
                 id: response.data.roomId,
                 name: response.data.username,
                 admin: response.data.admin,
+                popUp: true
               },
             });
           }
@@ -60,9 +62,9 @@ export default function CreateRoom() {
         username: joinerName,
       };
       axios
-        .post("http://ec2-3-136-37-255.us-east-2.compute.amazonaws.com:8080/join-room", { ...request })
+        .post("http://localhost:8080/join-room", { ...request })
         .then((response) => {
-          if(response.status === 201) {
+          if (response.status === 201) {
             sessionStorage.setItem("userSession", JSON.stringify(response.data));
             navigate("/poker", {
               state: {
@@ -87,9 +89,14 @@ export default function CreateRoom() {
   };
 
   return (
-    <div className="roomContainer">
-      <div className="room">
-        <div className="field">
+    <div className="header">
+      <h1 className="title">Walmart's Planning Poker</h1>
+      <div className="login-screen">
+        <div className="logo">
+          <img src={logo} alt="Logo" />
+        </div>
+        <div className="create-session">
+          <h2>Create Session</h2>
           <TextField
             fullWidth
             id="standard-basic"
@@ -99,8 +106,6 @@ export default function CreateRoom() {
             variant="standard"
             onChange={(e) => setRoomName(e.target.value)}
           />
-        </div>
-        <div className="field">
           <TextField
             fullWidth
             id="standard-basic"
@@ -110,26 +115,14 @@ export default function CreateRoom() {
             variant="standard"
             onChange={(e) => setUsername(e.target.value)}
           />
+          <div className="bottomButtons">
+            <Button variant="outlined" onClick={handleCreateRoom}>
+              Create Room
+            </Button>
+          </div>
         </div>
-        <div className="field">
-          <TextField
-            fullWidth
-            id="standard-basic"
-            label="Enter Jira Query (jql)"
-            required
-            autoComplete="off"
-            variant="standard"
-            onChange={(e) => setJql(e.target.value)}
-          />
-        </div>
-        <div className="bottomButtons">
-          <Button variant="outlined" onClick={handleCreateRoom}>
-            Create Room
-          </Button>
-        </div>
-      </div>
-      <div className="room">
-        <div className="field">
+        <div className="join-session">
+          <h2>Join Session</h2>
           <TextField
             fullWidth
             id="standard-basic"
@@ -139,8 +132,6 @@ export default function CreateRoom() {
             variant="standard"
             onChange={(e) => setRoomId(e.target.value)}
           />
-        </div>
-        <div className="field">
           <TextField
             fullWidth
             id="standard-basic"
@@ -150,11 +141,11 @@ export default function CreateRoom() {
             variant="standard"
             onChange={(e) => setJoinerName(e.target.value)}
           />
-        </div>
-        <div className="bottomButtons">
-          <Button variant="outlined" onClick={handleJoinRoom}>
-            Join Room
-          </Button>
+          <div className="bottomButtons">
+            <Button variant="outlined" onClick={handleJoinRoom}>
+              Join Room
+            </Button>
+          </div>
         </div>
       </div>
     </div>

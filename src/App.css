@@ -37,6 +37,151 @@
   }
 }
 
+/* NAVBAR */
+
+nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 7%;
+}
+
+
+.nav-links li{
+  list-style: none;
+  display: inline-block;
+  margin: 10px 20px ;
+  position: relative;
+} 
+
+.nav-links li a{
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-links li::after{
+  content: '';
+  width: 0;
+  height: 3px;
+  background: #ff5361;
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+}
+.nav-links li:hover::after{
+  width: 100%;
+  transition: 0.5s;
+}
+
+.register-btn{
+  background: #fff;
+  color: #000;
+  padding: 8px 20px;
+  border: 1px solid #fff;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px
+}
+
+
+.header {
+  min-height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)),
+    url(assets/Planning-poker.webp);
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Align items in the center horizontally */
+  justify-content: center; /* Align items in the center vertically */
+  color: #fff;
+}
+
+.title {
+  font-size: 80px; /* Adjust the font size as needed */
+  text-align:center;
+  padding-bottom: 200px;
+}
+
+
+.login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+}
+
+.create-session,
+.join-session {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background-color:#fff;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  width: 500px; /* Adjust the width as needed */
+  color: #2F3C7E;
+}
+
+h2 {
+  /* padding-left: 100px; */
+  font-size: 30px;
+  color: #333;
+  margin-bottom: 20px;
+  color: #2F3C7E;
+
+}
+
+.bottomButtons {
+  margin-top: 20px;
+}
+
+.bottomButtons button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.TextField {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.TextField input {
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.Button {
+  margin-top: 10px;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+}
+
+.logo img {
+  width: 200px; /* Adjust the size as needed */
+}
+
+.title{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: #fff;
+
+}
+
+
+
 .container {
   display: flex;
   flex-direction: column;
