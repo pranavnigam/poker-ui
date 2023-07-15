@@ -12,7 +12,7 @@ function App() {
   }, []);
 
   const fetchIssue = () => {
-    fetch('http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/api/login')
+    fetch('http://poker-service.azurewebsites.net/api/login')
     .then(response => response.json())
     .then(data => {
       console.log(data);
