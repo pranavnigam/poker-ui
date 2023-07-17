@@ -3,10 +3,10 @@ import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Alert, Button, Typography } from "@mui/material";
 import "../App.css";
+import "../pages/Home.css";
 import ai from "../assets/ai.png";
 import businessman from "../assets/businessman.png";
-import robot3 from "../assets/robot (3).png";
-import robot from "../assets/robot.png";
+import user from "../assets/user.svg";
 import io from 'socket.io-client';
 import axios from "../utils/axiosInstance";
 import PopUpDialog from "./popUp";
@@ -17,6 +17,7 @@ function Home() {
 
     const [isFlipped, setIsFlipped] = useState(false);
     const [isFrontCard, setIsFrontCard] = useState(true);
+    const [roomName, setRoomName] = useState("");
 
     // const userList = location && location.state && location.state.userList ? location.state.userList : [];
     const [userDetails, setUserDetails] = useState([]);
@@ -35,7 +36,7 @@ function Home() {
     const [isAdmin, setIsAdmin] = useState(userSession && userSession.admin ? userSession.admin : false);
 
     useEffect(() => {
-      const socketInstance = io.connect('http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080', {
+      const socketInstance = io.connect('http://localhost:8080', {
         withCredentials: true, //Setting it true will enable sending cookies to server
       });
 
@@ -83,9 +84,10 @@ function Home() {
     const fetchUserDetails = () => {
       const userSession = JSON.parse(sessionStorage.getItem("userSession"));
       if(userSession) {
-        axios.get("http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/user-details", { params: { roomId: userSession.roomId } }).then((response) => {
+        axios.get("http://localhost:8080/user-details", { params: { roomId: userSession.roomId } }).then((response) => {
           if(response && response.data && response.data.status === 201) {
             updateMembersInTable(response.data.users);
+            setRoomName(response?.data?.users[0]?.roomName);
           }
         }).catch((error) => {
           console.log("fetchUserDetails error: ", error);
@@ -98,7 +100,7 @@ function Home() {
       const request = {...userSession, vote: option};
       setVoteStatus(true);
       setVoteValue(option);
-      axios.post("http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/cast-vote", { ...request }).then((response) => {
+      axios.post("http://localhost:8080/cast-vote", { ...request }).then((response) => {
         if(response && response.status === 201) {
           console.log("castVote response: ", response.data);
         }
@@ -154,7 +156,7 @@ function Home() {
     };
 
     const handleRevealCard = () => {
-      axios.get("http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/reveal-card").then(res => {
+      axios.get("http://localhost:8080/reveal-card").then(res => {
         if(res.status === 200) {
           console.log("Reveal Card response: ", res.data);
         }
@@ -164,7 +166,7 @@ function Home() {
     };
 
     const handleLeaveRoom = () => {
-      axios.get("http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/leave-room").then(res => {
+      axios.get("http://localhost:8080/leave-room").then(res => {
         if(res.status === 201) {
           console.log("Leave Room response: ", res);
           navigate("/")
@@ -178,11 +180,14 @@ function Home() {
       <div className="board-container">
         <Alert severity="success">Share the Room Id {roomId} with others to invite.</Alert>
         <div className="leave-room">
-          <Button variant="outlined" onClick={handleLeaveRoom} style={{background: '#e73434',color: 'black', margin: '20px'}} startIcon={<ExitToAppOutlinedIcon />}>
+          <Button variant="contained" onClick={handleLeaveRoom} startIcon={<ExitToAppOutlinedIcon />}>
             Leave Room
           </Button>
         </div>
         <div className="poker-body">
+          <div className="poker-body-title">
+            <h1>{roomName}</h1>
+          </div>
           <div className="mid-profile" id="top">
             <div className="profile-icons mid-top">
               { topView && Array.from(topView).map(([key, value]) => (
@@ -193,7 +198,7 @@ function Home() {
                   </div>
                   <div className={`profile ${isFlipped ? "flip" : ""}`} key={key}>
                     {isFrontCard ? (
-                      <img src={robot} alt="Profile Icon" />
+                      <img src={user} alt="Profile Icon" />
                     ) : (
                       <Typography>{value.vote}</Typography>
                     )}
@@ -213,7 +218,7 @@ function Home() {
                     </div>
                     <div className={`profile ${isFlipped ? "flip" : ""}`} key={key}>
                       {isFrontCard ? (
-                        <img src={robot} alt="Profile Icon" />
+                        <img src={user} alt="Profile Icon" />
                       ) : (
                         <Typography>{value.vote}</Typography>
                       )}
@@ -258,7 +263,7 @@ function Home() {
                     </div>
                     <div className={`profile ${isFlipped ? "flip" : ""}`} key={key}>
                       {isFrontCard ? (
-                        <img src={robot} alt="Profile Icon" />
+                        <img src={user} alt="Profile Icon" />
                       ) : (
                         <Typography>{value.vote}</Typography>
                       )}
@@ -278,7 +283,7 @@ function Home() {
                   </div>
                   <div className={`profile ${isFlipped ? "flip" : ""}`} key={key}>
                     {isFrontCard ? (
-                      <img src={robot} alt="Profile Icon" />
+                      <img src={user} alt="Profile Icon" />
                     ) : (
                       <Typography>{value.vote}</Typography>
                     )}
@@ -289,9 +294,10 @@ function Home() {
           </div>
         </div>
         <div className="points-container">
-          { !isAdmin && voteOptions && voteOptions.map(option => (
-            <div className="box" onClick={() => castVote(option)}>
-              <Typography>{option}</Typography>
+          {!isAdmin && voteOptions && voteOptions.map((option, index) => (
+            <div className="card"
+              onClick={() => castVote(option)}>
+              <p className="optionText">{option}</p>
             </div>
           ))}
         </div>

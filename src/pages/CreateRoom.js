@@ -28,7 +28,7 @@ export default function CreateRoom() {
         jql: "jql",
       };
       axios
-        .post("http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/create-room", { ...request })
+        .post("http://localhost:8080/create-room", { ...request })
         .then((response) => {
           if (response.data && response.data.roomId) {
             sessionStorage.setItem(
@@ -62,7 +62,7 @@ export default function CreateRoom() {
         username: joinerName,
       };
       axios
-        .post("http://ec2-18-219-4-248.us-east-2.compute.amazonaws.com:8080/join-room", { ...request })
+        .post("http://localhost:8080/join-room", { ...request })
         .then((response) => {
           if (response.status === 201) {
             sessionStorage.setItem("userSession", JSON.stringify(response.data));
@@ -96,7 +96,7 @@ export default function CreateRoom() {
           <img src={logo} alt="Logo" />
         </div>
         <div className="create-session">
-          <h2>Create Session</h2>
+          <h2>Create Room</h2>
           <TextField
             fullWidth
             id="standard-basic"
@@ -122,7 +122,7 @@ export default function CreateRoom() {
           </div>
         </div>
         <div className="join-session">
-          <h2>Join Session</h2>
+          <h2>Join Room</h2>
           <TextField
             fullWidth
             id="standard-basic"
